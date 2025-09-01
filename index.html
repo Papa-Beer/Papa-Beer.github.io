@@ -1,15 +1,55 @@
+const { JSDOM } = require("jsdom");
+
+function processHTML(htmlContent) {
+  // Use JSDOM to parse the HTML string provided by the user
+  const dom = new JSDOM(htmlContent);
+  const document = dom.window.document;
+
+  // Select all event containers
+  const events = document.querySelectorAll(".event");
+
+  // Extract name + time and log to console
+  events.forEach(event => {
+    const name = event.querySelector(".event-title")?.textContent.trim();
+    const time = event.querySelector(".event-time")?.textContent.trim();
+
+    if (name && time) {
+      console.log(`Event: ${name}, Time: ${time}`);
+    }
+  });
+}
+
+// --- Example Usage ---
+// In a real application, the 'userProvidedHTML' would come from
+// a form input, a text area, or a simulated file read.
+// This is your "uploaded" content.
+const userProvidedHTML = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My GitHub Page</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Event Schedule</title>
 </head>
 <body>
-  <h1>Hello, GitHub Pages!</h1>
-  <button onclick="showMessage()">Click Me</button>
-
-  <script src="script.js"></script>
+  <div class="event-container">
+    <div class="event">
+      <div class="event-title">Live Jazz Night</div>
+      <div class="event-time">8:00 PM</div>
+    </div>
+    <div class="event">
+      <div class="event-title">Poetry Slam</div>
+      <div class="event-time">9:30 PM</div>
+    </div>
+    <div class="event">
+      <div class="event-title">Comedy Show</div>
+    </div>
+    <div class="event">
+      <div class="event-title">Acoustic Set</div>
+      <div class="event-time">11:00 PM</div>
+    </div>
+  </div>
 </body>
 </html>
+`;
+
+// Call the function with the "uploaded" HTML content
+processHTML(userProvidedHTML);
